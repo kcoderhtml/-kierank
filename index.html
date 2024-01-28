@@ -8,18 +8,21 @@
 
     <style>
         .fit-container {
-            display: inline-block;
             max-width: 100%;
+            width: 100%;
             white-space: nowrap;
             margin-left: 2%;
             margin-right: 2%;
         }
 
         .fit-content {
-            display: inline-block;
+            display: flex;
             max-width: 100%;
+            width: fit-content;
             white-space: nowrap;
             overflow: hidden;
+            justify-content: center;
+            align-items: center;
         }
 
         .fit-container h3 {
@@ -27,6 +30,8 @@
         }
 
         .fit-content pre {
+            text-align: center;
+            font-size: 100%;
             margin: 0;
         }
     </style>
@@ -37,6 +42,7 @@
     <h1>Random ASCII Art Viewer</h1>
 
     <div class="fit-container" id="randomResult"></div>
+    <h4 id="debug"></h4>
 
     <script>
         // Load JSON file
@@ -65,11 +71,15 @@
         function adjustFontSize() {
             const fitContent = document.getElementById('fitContent');
             const fitContainer = document.getElementById('randomResult');
-            const containerWidth = fitContent.clientWidth;
+            // get width of the page
+            const containerWidth = fitContainer.clientWidth;
             const textWidth = fitContent.scrollWidth;
 
-            const scaleFactor = containerWidth / (textWidth + 2 * parseFloat(getComputedStyle(fitContainer).marginLeft));
+            const scaleFactor = containerWidth / textWidth * 0.9;
             const fontSize = 100 * scaleFactor + '%';
+
+            const debug = document.getElementById('debug');
+            debug.innerHTML = `containerWidth: ${containerWidth}, textWidth: ${textWidth}, scaleFactor: ${scaleFactor}, fontSize: ${fontSize}`;
 
             fitContent.style.fontSize = fontSize;
         }
@@ -94,4 +104,5 @@
     </script>
 
 </body>
+
 </html>
