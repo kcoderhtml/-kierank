@@ -21,8 +21,13 @@
             overflow: hidden;
         }
 
+        .fit-container h3 {
+            text-align: center;
+        }
+
         .fit-content pre {
-            margin: 0;
+            margin-left: 2%;
+            margin-right: 2%;
         }
     </style>
 </head>
@@ -68,10 +73,20 @@
             fitContent.style.fontSize = fontSize;
         }
 
-        // Call adjustFontSize() initially and whenever the window is resized
-        window.addEventListener('resize', adjustFontSize);
-        // wait for the page to load before calling adjustFontSize()
-        window.onload = adjustFontSize;
+        // Call adjustFontSize() initially and whenever the window is resized pause for 100ms to avoid excessive calls
+        window.addEventListener('resize', () => {
+            adjustFontSize();
+            clearTimeout(window.resizedFinished);
+            window.resizedFinished = setTimeout(() => {
+                adjustFontSize();
+            }, 200);
+        });
+        // wait for the fetch to complete before calling adjustFontSize()
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                adjustFontSize();
+            }, 1000);
+        });
     </script>
 
 </body>
