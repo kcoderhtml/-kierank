@@ -8,7 +8,7 @@ LIMIT=0
 UNLIMITED=true
 
 # get parameters
-while getopts ":t:l:a" opt; do
+while getopts ":t:l:f" opt; do
   case $opt in
     t) TEXT="$OPTARG"
     ;;
