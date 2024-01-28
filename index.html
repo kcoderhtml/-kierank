@@ -1,48 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random ASCII Art Viewer</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-        }
-        pre {
-            white-space: pre-wrap;
-            margin: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>Random ASCII Art Viewer</h1>
+    <h1>Random ASCII Art Viewer</h1>
 
-<div id="randomResult"></div>
+    <div id="randomResult" class="asci"></div>
 
-<script>
-    // Load JSON file
-    fetch('~kierank/ascii_results.json')
-        .then(response => response.json())
-        .then(data => {
-            // Get a random result
-            const randomIndex = Math.floor(Math.random() * data.results.length);
-            const randomResult = data.results[randomIndex];
+    <script>
+        // Load JSON file
+        fetch('./ascii_results.json')
+            .then(response => response.json())
+            .then(data => {
+                // Get a random result
+                const randomIndex = Math.floor(Math.random() * data.results.length);
+                const randomResult = data.results[randomIndex];
 
-            // Display the result on the page
-            const resultDiv = document.getElementById('randomResult');
-            resultDiv.innerHTML = `
-                <h3>Font: ${randomResult.font}</h3>
+                // Display the result on the page
+                const resultDiv = document.getElementById('randomResult');
+                resultDiv.innerHTML = `
+               <h3>Font: ${randomResult.font}</h3>
                 </br>
-                <pre>${randomResult.ascii_art}</pre>
+                <pre>${randomResult.ascii_art}</pre> 
             `;
-        })
-        .catch(error => console.error('Error fetching JSON:', error));
-</script>
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
+    </script>
+
+    <script>
+        function adjustFontSize() {
+            const fitContent = document.getElementById('fitContent');
+            const containerWidth = fitContent.clientWidth;
+            const textWidth = fitContent.scrollWidth;
+
+            const scaleFactor = containerWidth / textWidth;
+            const fontSize = 100 * scaleFactor + '%';
+
+            fitContent.style.fontSize = fontSize;
+        }
+
+        // Call adjustFontSize() initially and whenever the window is resized
+        window.addEventListener('resize', adjustFontSize);
+        adjustFontSize();
+    </script>
 
 </body>
+
 </html>
