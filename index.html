@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random ASCII Art Viewer</title>
-    <link rel="stylesheet" href="style.css">
 
     <style>
         .fit-container {
             display: inline-block;
             max-width: 100%;
             white-space: nowrap;
+            margin-left: 2%;
+            margin-right: 2%;
         }
 
         .fit-content {
@@ -26,8 +27,7 @@
         }
 
         .fit-content pre {
-            margin-left: 2%;
-            margin-right: 2%;
+            margin: 0;
         }
     </style>
 </head>
@@ -64,28 +64,32 @@
         // Adjust the font size of the ASCII art to fit the width of the container
         function adjustFontSize() {
             const fitContent = document.getElementById('fitContent');
+            const fitContainer = document.getElementById('randomResult');
             const containerWidth = fitContent.clientWidth;
             const textWidth = fitContent.scrollWidth;
 
-            const scaleFactor = containerWidth / textWidth;
+            const scaleFactor = containerWidth / (textWidth + 2 * parseFloat(getComputedStyle(fitContainer).marginLeft));
             const fontSize = 100 * scaleFactor + '%';
 
             fitContent.style.fontSize = fontSize;
         }
 
-        // Call adjustFontSize() initially and whenever the window is resized pause for 100ms to avoid excessive calls
-        window.addEventListener('resize', () => {
-            adjustFontSize();
-            clearTimeout(window.resizedFinished);
-            window.resizedFinished = setTimeout(() => {
-                adjustFontSize();
-            }, 200);
-        });
-        // wait for the fetch to complete before calling adjustFontSize()
+        // Call adjustFontSize() initially
         window.addEventListener('load', () => {
             setTimeout(() => {
                 adjustFontSize();
             }, 1000);
+        });
+
+        // Call adjustFontSize() on resize using requestAnimationFrame for better performance
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (resizeTimeout) {
+                window.cancelAnimationFrame(resizeTimeout);
+            }
+            resizeTimeout = window.requestAnimationFrame(() => {
+                adjustFontSize();
+            });
         });
     </script>
 
