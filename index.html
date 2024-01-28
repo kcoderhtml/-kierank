@@ -6,13 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random ASCII Art Viewer</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        .fit-container {
+            display: inline-block;
+            max-width: 100%;
+            white-space: nowrap;
+        }
+
+        .fit-content {
+            display: inline-block;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .fit-content pre {
+            margin: 0;
+        }
+    </style>
 </head>
 
 <body>
 
     <h1>Random ASCII Art Viewer</h1>
 
-    <div id="randomResult" class="asci"></div>
+    <div class="fit-container" id="randomResult"></div>
 
     <script>
         // Load JSON file
@@ -28,13 +47,16 @@
                 resultDiv.innerHTML = `
                <h3>Font: ${randomResult.font}</h3>
                 </br>
-                <pre>${randomResult.ascii_art}</pre> 
+                <div class="fit-content" id="fitContent">
+                    <pre>${randomResult.ascii_art}</pre>
+                </div>
             `;
             })
             .catch(error => console.error('Error fetching JSON:', error));
     </script>
 
     <script>
+        // Adjust the font size of the ASCII art to fit the width of the container
         function adjustFontSize() {
             const fitContent = document.getElementById('fitContent');
             const containerWidth = fitContent.clientWidth;
@@ -48,9 +70,9 @@
 
         // Call adjustFontSize() initially and whenever the window is resized
         window.addEventListener('resize', adjustFontSize);
-        adjustFontSize();
+        // wait for the page to load before calling adjustFontSize()
+        window.onload = adjustFontSize;
     </script>
 
 </body>
-
 </html>
