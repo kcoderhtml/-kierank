@@ -6,6 +6,7 @@ FONTS_ENDPOINT="https://asciified.thelicato.io/api/v2/fonts"
 TEXT="Hello this is Lorem Ipsum"
 LIMIT=0
 UNLIMITED=true
+FONTS=("Fraktur" "Fuzzy" "Georgi16" "Georgia11" "Ghost" "Gothic" "Graceful" "Graffiti" "Henry 3D" "Hex" "ICL-1900" "Impossible" "Isometric1" "Isometric2" "Isometric3" "Isometric4" "JS Bracket Letters" "JS Stick Letters" "Keyboard" "Larry 3D 2" "Lean" "Letters" "Marquee")
 
 # get parameters
 while getopts ":t:l:f" opt; do
@@ -29,8 +30,12 @@ url_encode() {
 ENCODED_TEXT=$(url_encode "$TEXT")
 
 # Get the list of available fonts
-fonts=$(curl -s "$FONTS_ENDPOINT" | jq -r '.fonts[]' | tr '\n' ' ')
-fonts=($fonts)
+if [ ${#FONTS[@]} -gt 0 ]; then
+    fonts=("${FONTS[@]}")
+else
+    fonts=$(curl -s "$FONTS_ENDPOINT" | jq -r '.fonts[]' | tr '\n' ' ')
+    fonts=($fonts)
+fi
 
 # Create an array to store results
 results=()
