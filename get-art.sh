@@ -23,11 +23,16 @@ results=()
 # Iterate over each font and fetch the ASCII art
 for font in "${fonts[@]}"; do
     echo "Fetching ASCII art: $API_ENDPOINT?text=$ENCODED_TEXT&font=$font"
-    result=$(curl -s "$API_ENDPOINT?text=$ENCODED_TEXT&font=$font" | tr '\n' '<br>')
-    ascii_art=$(echo "$result")
+    result=$(curl -s "$API_ENDPOINT?text=$ENCODED_TEXT&font=$font" | jq -s -R '.') 
+
+    # replace \n with <br/>
+    result=$(echo "$result" | sed 's/\\n/<\/br>/g')
+
+    # put into format {"font":"","ascii_art":""}
+    json=$(printf '{"font":"%s","ascii_art":%s}' "$font" "$result")
     
     # Add result to the array
-    results+=('{"font": "'"$font"'", "ascii_art": "'"$ascii_art"'"}')
+    results+=("$json")
 done
 
 # Convert the array to JSON
