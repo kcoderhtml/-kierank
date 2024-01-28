@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# get parameters
+while getopts ":t:l:" opt; do
+  case $opt in
+    t) TEXT="$OPTARG"
+    ;;
+    l) LIMIT="$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
 # Function to URL encode a string
 url_encode() {
     local string="$1"
@@ -14,8 +26,8 @@ TEXT="Hello! Welcome to my site"
 ENCODED_TEXT=$(url_encode "$TEXT")
 
 # Get the list of available fonts
-# fonts=$(curl -s "$FONTS_ENDPOINT" | jq -r '.fonts[]')
-fonts=("1Row" "3-D" "3D Diagonal" "3D-ASCII")
+fonts=$(curl -s "$FONTS_ENDPOINT" | jq -r '.fonts[]' | tr '\n' ' ')
+fonts=($fonts)
 
 # Create an array to store results
 results=()
@@ -33,6 +45,11 @@ for font in "${fonts[@]}"; do
     
     # Add result to the array
     results+=("$json")
+    
+    # Limit the number of results
+    if [ "$LIMIT" ] && [ "${#results[@]}" -ge "$LIMIT" ]; then
+        break
+    fi
 done
 
 # Convert the array to JSON
