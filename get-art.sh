@@ -6,6 +6,7 @@ FONTS_ENDPOINT="https://asciified.thelicato.io/api/v2/fonts"
 TEXT="Hello this is Lorem Ipsum"
 LIMIT=0
 UNLIMITED=true
+# FONTS=() # leave empty to use the API to get the list of fonts
 FONTS=("Fraktur" "Fuzzy" "Georgi16" "Georgia11" "Ghost" "Gothic" "Graceful" "Graffiti" "Henry 3D" "Hex" "ICL-1900" "Impossible" "Isometric1" "Isometric2" "Isometric3" "Isometric4" "JS Bracket Letters" "JS Stick Letters" "Keyboard" "Larry 3D 2" "Lean" "Letters" "Marquee")
 
 # get parameters
