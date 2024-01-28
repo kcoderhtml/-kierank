@@ -1,11 +1,18 @@
 #!/bin/bash
 
+# set up variables
+API_ENDPOINT="https://asciified.thelicato.io/api/v2/ascii"
+FONTS_ENDPOINT="https://asciified.thelicato.io/api/v2/fonts"
+TEXT="Hello this is Lorem Ipsum"
+LIMIT=0
+UNLIMITED=true
+
 # get parameters
-while getopts ":t:l:" opt; do
+while getopts ":t:l:a" opt; do
   case $opt in
     t) TEXT="$OPTARG"
     ;;
-    l) LIMIT="$OPTARG"
+    l) LIMIT="$OPTARG"; UNLIMITED=false
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
@@ -17,10 +24,6 @@ url_encode() {
     local string="$1"
     echo -n "$string" | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
 }
-
-API_ENDPOINT="https://asciified.thelicato.io/api/v2/ascii"
-FONTS_ENDPOINT="https://asciified.thelicato.io/api/v2/fonts"
-TEXT="Hello! Welcome to my site"
 
 # URL encode the text
 ENCODED_TEXT=$(url_encode "$TEXT")
@@ -47,7 +50,7 @@ for font in "${fonts[@]}"; do
     results+=("$json")
     
     # Limit the number of results
-    if [ "$LIMIT" ] && [ "${#results[@]}" -ge "$LIMIT" ]; then
+    if [ "$LIMIT" ] && [ "${#results[@]}" -ge "$LIMIT" ] && [ "$UNLIMITED" != true ]; then
         break
     fi
 done
